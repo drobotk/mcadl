@@ -1,2 +1,7 @@
 # mcadl
-Simple minecraft assets downloader
+Simple Minecraft assets downloader
+
+# Usage
+```sh
+./assets.py path/to/index.json
+```
