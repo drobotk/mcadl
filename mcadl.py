@@ -60,16 +60,18 @@ async def main() -> int:
 
     async with aiohttp.ClientSession() as s:
         async def try_download(hash: str) -> str | None:
-            async with s.get(ASSETS_DOWNLOAD_URL.format(head=hash[:2], hash=hash)) as r:
-                if not r.ok:
-                    print(f"ERROR: {hash}: status code {r.status}")
-                    return hash
-                try:
+            try:
+                async with s.get(ASSETS_DOWNLOAD_URL.format(head=hash[:2], hash=hash)) as r:
+                    if not r.ok:
+                        print(f"ERROR: {hash}: status code {r.status}")
+                        return hash
+                    
                     with open(make_path(hash), "wb") as f:
                         f.write(await r.read())
-                except Exception as e:
-                    print(f"ERROR: {hash}: {e.__class__.__name__}: {e}")
-                    return hash
+                            
+            except Exception as e:
+                print(f"ERROR: {hash}: {e.__class__.__name__}: {e}")
+                return hash
         
         while hashes:
             hashes = list(filter(lambda hash: not verify(hash), hashes))
